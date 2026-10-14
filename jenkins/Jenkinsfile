@@ -1,0 +1,60 @@
+
+pipeline {
+    agent any
+
+    options {
+        timestamps()
+    }
+
+    environment {
+        IMAGE_NAME = 'ai-ecommerce-app'
+        IMAGE_TAG = '1.0.0'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('application') {
+                    sh 'npm ci'
+                }
+            }
+        }
+
+        stage('Test Application') {
+            steps {
+                dir('application') {
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                    docker build \
+                      -f docker/Dockerfile \
+                      -t ${IMAGE_NAME}:${IMAGE_TAG} \
+                      application
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI pipeline completed successfully.'
+        }
+
+        failure {
+            echo 'CI pipeline failed. Check the stage logs.'
+        }
+    }
+}
+
+

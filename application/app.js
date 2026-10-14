@@ -36,3 +36,11 @@ app.listen(PORT, "0.0.0.0", () => {
   console.log(`Application running on port ${PORT}`);
 });
 
+if (require.main === module) {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Application running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
+
