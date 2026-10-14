@@ -32,10 +32,7 @@ app.get("/products", (req, res) => {
   ]);
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Application running on port ${PORT}`);
-});
-
+// Start server only when this file is run directly
 if (require.main === module) {
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Application running on port ${PORT}`);
