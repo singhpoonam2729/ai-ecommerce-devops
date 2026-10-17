@@ -24,3 +24,12 @@ test("products endpoint returns three products", async () => {
   assert.equal(response.body.length, 3);
 });
 
+
+test("metrics endpoint returns Prometheus metrics", async () => {
+  const response = await request(app).get("/metrics");
+
+  assert.equal(response.status, 200);
+  assert.match(response.headers["content-type"], /text\/plain/);
+  assert.match(response.text, /http_requests_total/);
+  assert.match(response.text, /process_cpu_seconds_total/);
+});

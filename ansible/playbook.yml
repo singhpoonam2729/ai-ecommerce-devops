@@ -1,0 +1,25 @@
+---
+- name: Configure AI E-Commerce DevOps application
+  hosts: local
+  become: false
+  gather_facts: true
+
+  tasks:
+    - name: Verify Docker is installed
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Display Docker version
+      debug:
+        msg: "{{ docker_version.stdout | default('Docker version check skipped in check mode') }}"
+
+    - name: Verify application image exists locally
+      command: docker image inspect ai-ecommerce-app:1.0.4
+      register: image_check
+      changed_when: false
+
+    - name: Display image verification result
+      debug:
+        msg: "AI E-Commerce application image is available locally."
+      when: image_check.rc is defined and image_check.rc == 0
